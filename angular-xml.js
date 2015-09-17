@@ -6,8 +6,13 @@ if (!X2JS) {
 
   function responseIsXml(response) {
     var contentType = response.headers('content-type');
+    var data = response.data;
     if (contentType) {
-      return contentType.search(/\Wxml/i) > -1;
+      // Hack to check for xml header in string
+      if (typeof data === 'string') {
+        if (data.indexOf('<?xml') > -1) return true;
+      }
+      return (contentType.search(/\Wxml/i) > -1);
     } else {
       return false;
     }
